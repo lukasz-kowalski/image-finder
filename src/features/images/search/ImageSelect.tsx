@@ -10,6 +10,10 @@ import { Card } from "@/components/card/Card";
 
 import { getImage } from "./getImage";
 
+// Dodac walidacje do formularza
+// Obsluzyc przypadek gdy nie ma zadnego zdjecia
+// Dopisac kilka testow
+
 export const ImageSelect = (): JSX.Element => {
   const userState = useContext(UserContext);
 
@@ -30,7 +34,9 @@ export const ImageSelect = (): JSX.Element => {
   };
 
   useEffect(() => {
-    getAndSaveImage();
+    if (!userState?.user?.selectedImg) {
+      getAndSaveImage();
+    }
   }, []);
 
   return (

@@ -4,12 +4,14 @@ import classNames from "classnames";
 interface Props {
   type?: "button" | "submit";
   variant?: "confirm" | "danger";
+  disabled?: boolean;
   onClick?: () => void;
 }
 
 export const Button = ({
   type = "button",
   variant = "confirm",
+  disabled,
   onClick,
   children,
 }: PropsWithChildren<Props>): JSX.Element => {
@@ -22,10 +24,17 @@ export const Button = ({
     "hover:bg-sky-700": variant === "confirm",
     "bg-red-600": variant === "danger",
     "hover:bg-red-700": variant === "danger",
+    "bg-gray-600": disabled,
+    "hover:bg-gray-700": disabled,
   });
 
   return (
-    <button className={buttonClassNames} type={type} onClick={onClick}>
+    <button
+      className={buttonClassNames}
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

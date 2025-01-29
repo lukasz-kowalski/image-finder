@@ -7,6 +7,9 @@ import { useFormik } from "formik";
 import { UserContext } from "@/features/user/context/UserContext";
 import { Input } from "@/components/input/Input";
 import { Button } from "@/components/button/Button";
+import { Select } from "@/components/select/Select";
+
+import { imageFormSchema } from "./ImageForm.schema";
 
 const topics = [
   { label: "Travel", value: "travel" },
@@ -16,24 +19,35 @@ const topics = [
   { label: "Other", value: "other" },
 ];
 
+interface FormFields {
+  name: string;
+  surname: string;
+  topic: string;
+  customTopic: string;
+}
+
 export const ImageForm = (): JSX.Element => {
   const router = useRouter();
   const userState = useContext(UserContext);
 
-  const formik = useFormik({
+  const formik = useFormik<FormFields>({
     initialValues: {
       name: "",
       surname: "",
       topic: "",
       customTopic: "",
     },
+    validationSchema: imageFormSchema,
     onSubmit: async (values) => {
-      userState?.setUserData({
-        name: values.name,
-        surname: values.surname,
-        topic: values.topic === "other" ? values.customTopic : values.topic,
-      });
-      router.push("/image-select");
+      if (formik.isValid) {
+        userState?.setUserData({
+          name: values.name,
+          surname: values.surname,
+          topic: values.topic === "other" ? values.customTopic : values.topic,
+          selectedImg: null,
+        });
+        router.push("/image-select");
+      }
     },
   });
 
@@ -42,57 +56,56 @@ export const ImageForm = (): JSX.Element => {
       className="p-4 grid grid-cols-2 gap-4 border shadow-sm shadow-gray-300"
       onSubmit={formik.handleSubmit}
     >
-      <div className="flex flex-col">
+      <Input
+        id="name"
+        name="name"
+        value={formik.values.name}
+        label="Name"
+        error={formik.touched.name ? formik.errors.name : undefined}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+
+      <Input
+        id="surname"
+        name="surname"
+        value={formik.values.surname}
+        label="Surname"
+        error={formik.touched.surname ? formik.errors.surname : undefined}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+
+      <Select
+        id="topic"
+        name="topic"
+        value={formik.values.topic}
+        label="Preferred topic"
+        error={formik.touched.topic ? formik.errors.topic : undefined}
+        options={topics}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+      />
+
+      {formik.values.topic === "other" ? (
         <Input
-          id="name"
-          name="name"
-          value={formik.values.name}
-          label="Name"
+          id="customTopic"
+          name="customTopic"
+          value={formik.values.customTopic}
+          label="Please specify topic"
+          error={
+            formik.touched.customTopic ? formik.errors.customTopic : undefined
+          }
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
-      </div>
+      ) : (
+        <div />
+      )}
 
-      <div className="flex flex-col">
-        <Input
-          id="surname"
-          name="surname"
-          value={formik.values.surname}
-          label="Surname"
-          onChange={formik.handleChange}
-        />
-      </div>
-
-      <div className="flex flex-col">
-        <label htmlFor="topic">Preferred topic</label>
-        <select
-          className="p-1 border-2 rounded-md"
-          name="topic"
-          id="topic"
-          onChange={formik.handleChange}
-          value={formik.values.topic}
-        >
-          <option value="">--Please choose an option--</option>
-          {topics.map((topic) => (
-            <option key={topic.value} value={topic.value}>
-              {topic.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex flex-col">
-        {formik.values.topic === "other" && (
-          <Input
-            id="customTopic"
-            name="customTopic"
-            value={formik.values.customTopic}
-            label="Please specify topic"
-            onChange={formik.handleChange}
-          />
-        )}
-      </div>
-
-      <Button type="submit">Search image</Button>
+      <Button type="submit" disabled={!formik.dirty}>
+        Search image
+      </Button>
     </form>
   );
 };
