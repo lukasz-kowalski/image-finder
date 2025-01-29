@@ -7,7 +7,6 @@ interface Props {
 }
 
 export const NoPhotoFound = ({ errors }: Props): JSX.Element => {
-  console.log(errors);
   return (
     <Card>
       {errors.map((error) => (

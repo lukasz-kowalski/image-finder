@@ -17,8 +17,6 @@ export const getImage = async (topicName: string): Promise<Img | null> => {
 
   const data = await response.json();
 
-  console.log(data);
-
   return {
     description: data.alt_description,
     urls: data.urls,
