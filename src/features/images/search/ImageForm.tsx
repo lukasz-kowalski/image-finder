@@ -1,11 +1,12 @@
 "use client";
 
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 
 import { UserContext } from "@/features/user/context/UserContext";
-
-import { getImage } from "./getImage";
+import { Input } from "@/components/input/Input";
+import { Button } from "@/components/button/Button";
 
 const topics = [
   { label: "Travel", value: "travel" },
@@ -16,6 +17,7 @@ const topics = [
 ];
 
 export const ImageForm = (): JSX.Element => {
+  const router = useRouter();
   const userState = useContext(UserContext);
 
   const formik = useFormik({
@@ -26,68 +28,71 @@ export const ImageForm = (): JSX.Element => {
       customTopic: "",
     },
     onSubmit: async (values) => {
-      const topic =
-        values.topic === "other" ? values.customTopic : values.topic;
-
-      const image = await getImage(topic);
       userState?.setUserData({
         name: values.name,
         surname: values.surname,
-        img: image,
+        topic: values.topic === "other" ? values.customTopic : values.topic,
       });
+      router.push("/image-select");
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="name">Name</label>
-      <input
-        id="name"
-        name="name"
-        onChange={formik.handleChange}
-        value={formik.values.name}
-      />
-      <label htmlFor="surname">Surname</label>
-      <input
-        id="surname"
-        name="surname"
-        onChange={formik.handleChange}
-        value={formik.values.surname}
-      />
+    <form
+      className="p-4 grid grid-cols-2 gap-4 border shadow-sm shadow-gray-300"
+      onSubmit={formik.handleSubmit}
+    >
+      <div className="flex flex-col">
+        <Input
+          id="name"
+          name="name"
+          value={formik.values.name}
+          label="Name"
+          onChange={formik.handleChange}
+        />
+      </div>
 
-      <label htmlFor="topic">Topic</label>
-      <select
-        name="topic"
-        id="topic"
-        onChange={formik.handleChange}
-        value={formik.values.topic}
-      >
-        <option value="">--Please choose an option--</option>
-        {topics.map((topic) => (
-          <option key={topic.value} value={topic.value}>
-            {topic.label}
-          </option>
-        ))}
-      </select>
+      <div className="flex flex-col">
+        <Input
+          id="surname"
+          name="surname"
+          value={formik.values.surname}
+          label="Surname"
+          onChange={formik.handleChange}
+        />
+      </div>
 
-      {formik.values.topic === "other" && (
-        <>
-          <label htmlFor="customTopic">Preferred topic</label>
-          <input
+      <div className="flex flex-col">
+        <label htmlFor="topic">Preferred topic</label>
+        <select
+          className="p-1 border-2 rounded-md"
+          name="topic"
+          id="topic"
+          onChange={formik.handleChange}
+          value={formik.values.topic}
+        >
+          <option value="">--Please choose an option--</option>
+          {topics.map((topic) => (
+            <option key={topic.value} value={topic.value}>
+              {topic.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="flex flex-col">
+        {formik.values.topic === "other" && (
+          <Input
             id="customTopic"
             name="customTopic"
-            onChange={formik.handleChange}
             value={formik.values.customTopic}
+            label="Please specify topic"
+            onChange={formik.handleChange}
           />
-        </>
-      )}
+        )}
+      </div>
 
-      <button type="submit">Search</button>
-
-      {/* <button type="button" onClick={onCancel}>
-      Reject
-    </button>
-    <button type="submit">Accept</button> */}
+      <Button type="submit">Search image</Button>
     </form>
   );
 };

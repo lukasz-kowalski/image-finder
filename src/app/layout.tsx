@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Providers } from "./Providers";
@@ -30,7 +31,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>{children}</Providers>
+        <header className="p-3 bg-sky-600">
+          <Link href="/" className="text-white">
+            Image Finder
+          </Link>
+        </header>
+        <Providers>
+          <div className="mt-6 flex justify-center min-h-screen p-4">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   );
