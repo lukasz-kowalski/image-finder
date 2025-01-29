@@ -9,7 +9,8 @@
     "lint": "next lint",
     "prettier": "prettier --write .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "prepare": "husky"
   },
   "dependencies": {
     "classnames": "^2.5.1",
