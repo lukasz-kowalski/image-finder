@@ -1,4 +1,4 @@
-To use this app you need to register on https://unsplash.com/ and create .env file with UNSPLASH_KEY variable containing your access key.
+To use this app you need to register on https://unsplash.com/ and create .env.development file with UNSPLASH_KEY variable containing your access key.
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 

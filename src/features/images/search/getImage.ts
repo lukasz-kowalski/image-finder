@@ -1,12 +1,13 @@
 export interface Img {
-  description: string;
-  urls: {
+  description?: string;
+  urls?: {
     full: string;
     raw: string;
     regular: string;
     small: string;
     thumb: string;
   };
+  errors?: string[];
 }
 
 export const getImage = async (topicName: string): Promise<Img | null> => {
@@ -21,5 +22,6 @@ export const getImage = async (topicName: string): Promise<Img | null> => {
   return {
     description: data.alt_description,
     urls: data.urls,
+    errors: data.errors,
   };
 };

@@ -9,10 +9,7 @@ import { Button } from "@/components/button/Button";
 import { Card } from "@/components/card/Card";
 
 import { getImage } from "./getImage";
-
-// Dodac walidacje do formularza
-// Obsluzyc przypadek gdy nie ma zadnego zdjecia
-// Dopisac kilka testow
+import { NoPhotoFound } from "./NoPhotoFound";
 
 export const ImageSelect = (): JSX.Element => {
   const userState = useContext(UserContext);
@@ -39,7 +36,9 @@ export const ImageSelect = (): JSX.Element => {
     }
   }, []);
 
-  return (
+  return userState?.user?.selectedImg?.errors ? (
+    <NoPhotoFound errors={userState?.user?.selectedImg?.errors} />
+  ) : (
     <Card>
       <div className="relative w-[24rem] h-[24rem]">
         {userState?.user?.selectedImg?.urls?.regular && (
