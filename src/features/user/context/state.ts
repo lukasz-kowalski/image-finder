@@ -22,7 +22,7 @@ export const useUserState = (): UseUserStateOutput => {
 
   const setUserData = useCallback((userData: User): void => {
     setUser((prevState) =>
-      prevState ? { ...prevState, ...userData } : userData
+      prevState ? { ...prevState, ...userData } : userData,
     );
   }, []);
 
