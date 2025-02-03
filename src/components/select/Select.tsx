@@ -1,41 +1,27 @@
-import { ChangeEvent } from "react";
+import { SelectHTMLAttributes } from "react";
 
 interface Option {
   label: string;
   value: string;
 }
 
-interface Props {
-  id: string;
-  name: string;
-  value: string;
+interface Props extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   error: string | undefined;
   options: Option[];
-  onChange: (e: ChangeEvent) => void;
-  onBlur: (e: ChangeEvent) => void;
 }
 
-export const Select = ({
-  id,
-  name,
-  value,
-  label,
-  error,
-  options,
-  onChange,
-  onBlur,
-}: Props): JSX.Element => {
+export const Select = (props: Props): JSX.Element => {
+  const { label, error, options, ...selectProps } = props;
+
   return (
     <div className="flex flex-col">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={selectProps.id}>{label}</label>
       <select
         className="p-1 border-2 rounded-md"
-        name={name}
-        id={id}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        {...selectProps}
+        aria-invalid={!!error}
+        aria-errormessage={`error-${selectProps.id}`}
       >
         <option value="">-- Please choose an option --</option>
         {options.map((option) => (
@@ -45,7 +31,9 @@ export const Select = ({
         ))}
       </select>
       <div className="h-[1rem]">
-        <p className="text-red-600 text-sm">{error}</p>
+        <p id={`error-${selectProps.id}`} className="text-red-600 text-sm">
+          {error}
+        </p>
       </div>
     </div>
   );

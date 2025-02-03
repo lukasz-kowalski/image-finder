@@ -64,6 +64,7 @@ export const ImageForm = (): JSX.Element => {
         error={formik.touched.name ? formik.errors.name : undefined}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
+        autoFocus
       />
 
       <Input

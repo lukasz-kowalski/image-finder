@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 
 import { Providers } from "./Providers";
 
@@ -37,6 +38,7 @@ export default function RootLayout({
           </Link>
         </header>
         <Providers>
+          <ToastContainer />
           <div className="mt-6 flex justify-center min-h-screen p-4">
             {children}
           </div>

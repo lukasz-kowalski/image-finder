@@ -1,3 +1,7 @@
+"use server";
+
+import { httpErrorHandler } from "@/features/errors/httpErrorHandler";
+
 export interface Img {
   description?: string;
   urls?: {
@@ -11,15 +15,31 @@ export interface Img {
 }
 
 export const getImage = async (topicName: string): Promise<Img | null> => {
-  const response = await fetch(
-    `https://api.unsplash.com/photos/random?client_id=${process.env.NEXT_PUBLIC_UNSPLASH_KEY}&query=${topicName}`,
-  );
+  try {
+    const response = await fetch(
+      `https://api.unsplash.com/photos/random?client_id=${process.env.UNSPLASH_KEY}&query=${topicName}`
+    );
 
-  const data = await response.json();
+    if (!response.ok) {
+      httpErrorHandler({
+        status: response.status,
+      });
 
-  return {
-    description: data.alt_description,
-    urls: data.urls,
-    errors: data.errors,
-  };
+      return null;
+    }
+
+    const data = await response.json();
+
+    return {
+      description: data.alt_description,
+      urls: data.urls,
+      errors: data.errors,
+    };
+  } catch (error) {
+    httpErrorHandler({
+      status: 0,
+    });
+
+    return null;
+  }
 };

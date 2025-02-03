@@ -1,37 +1,26 @@
-import { ChangeEvent } from "react";
+import { InputHTMLAttributes } from "react";
 
-interface Props {
-  id: string;
-  name: string;
-  value: string;
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error: string | undefined;
-  onChange: (e: ChangeEvent) => void;
-  onBlur: (e: ChangeEvent) => void;
 }
 
-export const Input = ({
-  id,
-  name,
-  value,
-  label,
-  error,
-  onChange,
-  onBlur,
-}: Props): JSX.Element => {
+export const Input = (props: Props): JSX.Element => {
+  const { label, error, ...inputProps } = props;
+
   return (
     <div className="flex flex-col">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={inputProps.id}>{label}</label>
       <input
+        {...inputProps}
         className="p-1 border-2 rounded-md"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        aria-invalid={!!error}
+        aria-errormessage={`error-${inputProps.id}`}
       />
       <div className="h-[1rem]">
-        <p className="text-red-600 text-sm">{error}</p>
+        <p id={`error-${inputProps.id}`} className="text-red-600 text-sm">
+          {error}
+        </p>
       </div>
     </div>
   );
