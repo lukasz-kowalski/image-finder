@@ -14,7 +14,6 @@ export interface User {
 export interface UseUserStateOutput {
   user: User | null;
   setUserData: (user: User) => void;
-  deleteUserData: () => void;
 }
 
 export const useUserState = (): UseUserStateOutput => {
@@ -22,17 +21,12 @@ export const useUserState = (): UseUserStateOutput => {
 
   const setUserData = useCallback((userData: User): void => {
     setUser((prevState) =>
-      prevState ? { ...prevState, ...userData } : userData,
+      prevState ? { ...prevState, ...userData } : userData
     );
-  }, []);
-
-  const deleteUserData = useCallback(() => {
-    setUser(null);
   }, []);
 
   return {
     user,
     setUserData,
-    deleteUserData,
   };
 };
