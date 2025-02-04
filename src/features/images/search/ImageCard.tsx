@@ -13,9 +13,7 @@ export const ImageCard = (): JSX.Element => {
     <Card>
       <div className="m-4">
         <ImageWrapper
-          wrapperHeight="8rem"
-          wrapperWidth="8rem"
-          src={userState?.user?.selectedImg?.urls?.thumb || ""}
+          src={userState?.user?.selectedImg?.urls?.regular || ""}
           alt={userState?.user?.selectedImg?.description || ""}
           fill
           aria-live="polite"

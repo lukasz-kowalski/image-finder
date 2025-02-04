@@ -41,8 +41,6 @@ export const ImageSelect = (): JSX.Element => {
   ) : (
     <Card>
       <ImageWrapper
-        wrapperHeight="24rem"
-        wrapperWidth="24rem"
         src={userState?.user?.selectedImg?.urls?.regular || ""}
         alt={userState?.user?.selectedImg?.description || ""}
         fill
